@@ -24,6 +24,16 @@ model User {
   suspendedAccount DateTime?
   blockedAccount   Boolean?
 
-  created_At DateTime @default(now())
-  updated_At DateTime @updatedAt()
+  refreshToken RefreshToken[]
+
+  created_At     DateTime @default(now())
+  updated_At     DateTime @updatedAt()
+  refreshTokenId String?
+}
+
+model RefreshToken {
+  id       String    @id @default(uuid())
+  userRole userRoles
+  user     User      @relation(fields: [userId], references: [id])
+  userId   String
 }
