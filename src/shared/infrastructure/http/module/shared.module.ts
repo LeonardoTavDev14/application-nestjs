@@ -9,6 +9,10 @@ import { JwtModule } from '@nestjs/jwt';
 import { IJwtProvider } from 'src/shared/application/providers/jwt.provider';
 import { NestJwtProvider } from '../../providers/nest.jwt.provider';
 import { ConfigService } from '@nestjs/config';
+import { IDayJsProvider } from 'src/shared/application/providers/dayjs.provider';
+import { NestDayJsProvider } from '../../providers/nest.dayjs.provider';
+import { ICompareProvider } from 'src/shared/application/providers/compare.provider';
+import { BcryptCompareProvider } from '../../providers/bcrypt.compare.provider';
 
 @Global()
 @Module({
@@ -26,12 +30,16 @@ import { ConfigService } from '@nestjs/config';
     { provide: INodemailerProvider, useClass: NestNodemailerProvider },
     { provide: ITemplatesProvider, useClass: NestTemplatesProvider },
     { provide: IJwtProvider, useClass: NestJwtProvider },
+    { provide: IDayJsProvider, useClass: NestDayJsProvider },
+    { provide: ICompareProvider, useClass: BcryptCompareProvider },
   ],
   exports: [
     IHashProvider,
     INodemailerProvider,
     ITemplatesProvider,
     IJwtProvider,
+    IDayJsProvider,
+    ICompareProvider,
   ],
 })
 export class SharedModule {}

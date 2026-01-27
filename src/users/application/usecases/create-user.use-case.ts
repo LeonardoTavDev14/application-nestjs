@@ -26,7 +26,13 @@ export class CreateUserUseCase {
 
     const hashedPassword = await this.hashProvider.hash(data.password);
 
-    const newUser = new User(data.name, data.email, hashedPassword);
+    const newUser = new User(
+      data.name,
+      data.email,
+      hashedPassword,
+      data.age,
+      'USER',
+    );
 
     const createdUser = await this.userRepository.createUser(newUser);
 

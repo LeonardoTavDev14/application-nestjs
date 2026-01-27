@@ -12,10 +12,25 @@ export class UsersDbRepository implements UserRepositories {
         name: user.name,
         email: user.email,
         password: user.password,
+        age: user.age,
+        role: user.role,
+        authAttempts: null,
+        suspendedAccount: null,
+        blockedAccount: false,
       },
     });
 
-    return new User(newUser.name, newUser.email, newUser.password, newUser.id);
+    return new User(
+      newUser.name,
+      newUser.email,
+      newUser.password,
+      newUser.age,
+      newUser.role,
+      newUser.authAttempts,
+      newUser.suspendedAccount,
+      newUser.blockedAccount,
+      newUser.id,
+    );
   }
 
   async findUserByEmail(email: string): Promise<User | null> {
@@ -31,6 +46,11 @@ export class UsersDbRepository implements UserRepositories {
       userAlreadyExists.name,
       userAlreadyExists.email,
       userAlreadyExists.password,
+      userAlreadyExists.age,
+      userAlreadyExists.role,
+      userAlreadyExists.authAttempts,
+      userAlreadyExists.suspendedAccount,
+      userAlreadyExists.blockedAccount,
       userAlreadyExists.id,
     );
   }
@@ -48,6 +68,11 @@ export class UsersDbRepository implements UserRepositories {
       userAlreadyExists.name,
       userAlreadyExists.email,
       userAlreadyExists.password,
+      userAlreadyExists.age,
+      userAlreadyExists.role,
+      userAlreadyExists.authAttempts,
+      userAlreadyExists.suspendedAccount,
+      userAlreadyExists.blockedAccount,
       userAlreadyExists.id,
     );
   }
