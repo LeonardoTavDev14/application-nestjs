@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './prisma/infrastructure/http/module/prisma.module';
 import { AuthModule } from './auth/infrastructure/http/module/auth.module';
 import { RefreshtokenModule } from './refresh-token/infrastructure/http/module/refreshtoken.module';
+import { MailModule } from './mail/infrastructure/http/module/mail.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { RefreshtokenModule } from './refresh-token/infrastructure/http/module/r
     PrismaModule,
     AuthModule,
     RefreshtokenModule,
+    MailModule,
   ],
   controllers: [],
   providers: [],

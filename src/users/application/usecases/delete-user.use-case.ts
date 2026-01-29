@@ -1,14 +1,12 @@
 import { UserRepositories } from 'src/users/domain/repositories/user.repositories';
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { INodemailerProvider } from 'src/shared/application/providers/nodemailer.provider';
-import { ITemplatesProvider } from 'src/shared/application/providers/templates.provider';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class DeleteUserUseCase {
   constructor(
     private readonly userRepository: UserRepositories,
-    private readonly nodemailerProvider: INodemailerProvider,
-    private readonly templatesProvider: ITemplatesProvider,
+    @Inject('MAIL_PROVIDER') private readonly mailClient: ClientProxy,
   ) {}
 
   async execute(id: string): Promise<void> {
@@ -18,10 +16,9 @@ export class DeleteUserUseCase {
       throw new BadRequestException('Falha ao encontrar os dados do usuário!');
     }
 
-    await this.nodemailerProvider.sendingMail({
+    this.mailClient.emit('send_deleted_email', {
       email: user.email,
-      subject: `APP-MY-QM - ACCOUNT DELETED`,
-      html: this.templatesProvider.sendDeleted(user.name),
+      name: user.name,
     });
 
     await this.userRepository.deleteUser(user.id!);

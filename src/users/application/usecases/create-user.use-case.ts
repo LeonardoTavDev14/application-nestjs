@@ -1,18 +1,16 @@
 import { UserRepositories } from 'src/users/domain/repositories/user.repositories';
 import { User } from 'src/users/domain/entities/user.entity';
 import { ICreateUserDTO } from 'src/users/infrastructure/http/dto/create-user.dto';
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Inject, Injectable } from '@nestjs/common';
 import { IHashProvider } from 'src/shared/application/providers/hash.provider';
-import { INodemailerProvider } from 'src/shared/application/providers/nodemailer.provider';
-import { ITemplatesProvider } from 'src/shared/application/providers/templates.provider';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class CreateUserUseCase {
   constructor(
     private readonly userRepository: UserRepositories,
     private readonly hashProvider: IHashProvider,
-    private readonly nodemailerProvider: INodemailerProvider,
-    private readonly templatesProvider: ITemplatesProvider,
+    @Inject('MAIL_PROVIDER') private readonly mailClient: ClientProxy,
   ) {}
 
   async execute(data: ICreateUserDTO): Promise<User> {
@@ -36,13 +34,9 @@ export class CreateUserUseCase {
 
     const createdUser = await this.userRepository.createUser(newUser);
 
-    await this.nodemailerProvider.sendingMail({
+    this.mailClient.emit('send_welcome_email', {
       email: createdUser.email,
-      subject: `APP-MY-QM - WELCOME`,
-      html: this.templatesProvider.sendWelcome(
-        createdUser.name.split(' ')[1],
-        createdUser.name.split(' ')[0],
-      ),
+      name: createdUser.name,
     });
 
     return createdUser;

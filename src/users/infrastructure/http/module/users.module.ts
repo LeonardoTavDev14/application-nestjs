@@ -5,9 +5,28 @@ import { CreateUserUseCase } from '../../../application/usecases/create-user.use
 import { PrismaModule } from 'src/prisma/infrastructure/http/module/prisma.module';
 import { DeleteUserUseCase } from 'src/users/application/usecases/delete-user.use-case';
 import { DeleteUserController } from '../controllers/delete-user.controller';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { MailModule } from 'src/mail/infrastructure/http/module/mail.module';
 
 @Module({
-  imports: [PrismaModule, SharedModule],
+  imports: [
+    ClientsModule.register([
+      {
+        name: 'MAIL_PROVIDER',
+        transport: Transport.RMQ,
+        options: {
+          urls: [process.env.RABBITMQ || 'amqp://localhost:5672'],
+          queue: 'mail_queue',
+          queueOptions: {
+            durable: true,
+          },
+        },
+      },
+    ]),
+    PrismaModule,
+    SharedModule,
+    MailModule,
+  ],
   controllers: [CreateUserController, DeleteUserController],
   providers: [CreateUserUseCase, DeleteUserUseCase],
 })
