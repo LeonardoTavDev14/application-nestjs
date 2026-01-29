@@ -15,7 +15,7 @@ import { MailModule } from 'src/mail/infrastructure/http/module/mail.module';
         name: 'MAIL_PROVIDER',
         transport: Transport.RMQ,
         options: {
-          urls: [process.env.RABBITMQ || 'amqp://localhost:5672'],
+          urls: [process.env.RABBITMQ || ''],
           queue: 'mail_queue',
           queueOptions: {
             durable: true,
