@@ -5,4 +5,6 @@ export abstract class UserRepositories {
   abstract findUserByEmail(email: string): Promise<User | null>;
   abstract findUserById(id: string): Promise<User | null>;
   abstract deleteUser(id: string): Promise<void>;
+  abstract updateUser(user: User): Promise<void>;
+  abstract suspendedUserIsLocked(user: User): Promise<boolean>;
 }

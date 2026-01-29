@@ -2,10 +2,14 @@ import { UserRepositories } from 'src/users/domain/repositories/user.repositorie
 import { dbPrisma } from 'src/prisma/infrastructure/database/db';
 import { Injectable } from '@nestjs/common';
 import { User } from 'src/users/domain/entities/user.entity';
+import { IDayJsProvider } from 'src/shared/application/providers/dayjs.provider';
 
 @Injectable()
 export class UsersDbRepository implements UserRepositories {
-  constructor(private readonly database: dbPrisma) {}
+  constructor(
+    private readonly database: dbPrisma,
+    private readonly dayJsProvider: IDayJsProvider,
+  ) {}
   async createUser(user: User): Promise<User> {
     const newUser = await this.database.user.create({
       data: {
@@ -81,5 +85,30 @@ export class UsersDbRepository implements UserRepositories {
     await this.database.user.delete({
       where: { id },
     });
+  }
+
+  async updateUser(user: User): Promise<void> {
+    await this.database.user.update({
+      where: { id: user.id },
+      data: {
+        name: user.name,
+        password: user.password,
+        age: user.age,
+        role: user.role,
+        authAttempts: user.authAttempts,
+        suspendedAccount: user.suspendedAccount,
+        blockedAccount: user.blockedAccount,
+      },
+    });
+  }
+
+  async suspendedUserIsLocked(user: User): Promise<boolean> {
+    if (!user.suspendedAccount) return false;
+
+    const isSuspendedAccount = this.dayJsProvider.isBefore(
+      user.suspendedAccount,
+    );
+
+    return isSuspendedAccount;
   }
 }

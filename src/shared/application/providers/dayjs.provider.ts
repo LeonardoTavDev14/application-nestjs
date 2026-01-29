@@ -1,6 +1,6 @@
-import { ConfigType, Dayjs, ManipulateType, OpUnitType } from 'dayjs';
+import { ConfigType, ManipulateType, OpUnitType } from 'dayjs';
 
 export abstract class IDayJsProvider {
-  abstract add(value: number, unit?: ManipulateType): Dayjs;
+  abstract add(value: number, unit?: ManipulateType): Date;
   abstract isBefore(date?: ConfigType, unit?: OpUnitType): boolean;
 }

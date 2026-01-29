@@ -4,6 +4,7 @@ import { SharedModule } from './shared/infrastructure/http/module/shared.module'
 import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './prisma/infrastructure/http/module/prisma.module';
 import { AuthModule } from './auth/infrastructure/http/module/auth.module';
+import { RefreshtokenModule } from './refresh-token/infrastructure/http/module/refreshtoken.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { AuthModule } from './auth/infrastructure/http/module/auth.module';
     ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
     AuthModule,
+    RefreshtokenModule,
   ],
   controllers: [],
   providers: [],

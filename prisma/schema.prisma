@@ -26,9 +26,8 @@ model User {
 
   refreshToken RefreshToken[]
 
-  created_At     DateTime @default(now())
-  updated_At     DateTime @updatedAt()
-  refreshTokenId String?
+  created_At DateTime @default(now())
+  updated_At DateTime @updatedAt()
 }
 
 model RefreshToken {

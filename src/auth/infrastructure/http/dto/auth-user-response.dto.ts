@@ -3,5 +3,6 @@ export class IAuthUserResponseDTO {
     name: string;
     email: string;
   };
+  refreshTokenId: string;
   accessToken: string;
 }
