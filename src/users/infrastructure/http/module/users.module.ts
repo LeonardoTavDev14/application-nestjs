@@ -7,6 +7,10 @@ import { DeleteUserUseCase } from 'src/users/application/usecases/delete-user.us
 import { DeleteUserController } from '../controllers/delete-user.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { MailModule } from 'src/mail/infrastructure/http/module/mail.module';
+import { FindUserProfileController } from '../controllers/find-user-profile.controller';
+import { FindUserProfileUseCase } from 'src/users/application/usecases/find-user-profile.use-case';
+import { DeleteUserByAdminUseCase } from 'src/users/application/usecases/delete-user-by-admin.use-case';
+import { DeleteUserByAdminController } from '../controllers/delete-user-by-admin.controller';
 
 @Module({
   imports: [
@@ -27,7 +31,17 @@ import { MailModule } from 'src/mail/infrastructure/http/module/mail.module';
     SharedModule,
     MailModule,
   ],
-  controllers: [CreateUserController, DeleteUserController],
-  providers: [CreateUserUseCase, DeleteUserUseCase],
+  controllers: [
+    CreateUserController,
+    DeleteUserController,
+    FindUserProfileController,
+    DeleteUserByAdminController,
+  ],
+  providers: [
+    CreateUserUseCase,
+    DeleteUserUseCase,
+    FindUserProfileUseCase,
+    DeleteUserByAdminUseCase,
+  ],
 })
 export class UsersModule {}

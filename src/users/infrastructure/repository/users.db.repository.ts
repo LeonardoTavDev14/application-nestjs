@@ -1,4 +1,7 @@
-import { UserRepositories } from 'src/users/domain/repositories/user.repositories';
+import {
+  IUserProfile,
+  UserRepositories,
+} from 'src/users/domain/repositories/user.repositories';
 import { dbPrisma } from 'src/prisma/infrastructure/database/db';
 import { Injectable } from '@nestjs/common';
 import { User } from 'src/users/domain/entities/user.entity';
@@ -39,7 +42,7 @@ export class UsersDbRepository implements UserRepositories {
 
   async findUserByEmail(email: string): Promise<User | null> {
     const userAlreadyExists = await this.database.user.findFirst({
-      where: { email },
+      where: { email: email.toLowerCase() },
     });
 
     if (!userAlreadyExists) {
@@ -110,5 +113,30 @@ export class UsersDbRepository implements UserRepositories {
     );
 
     return isSuspendedAccount;
+  }
+
+  async findUserProfile(id: string): Promise<IUserProfile | null> {
+    const userAlreadyExists = await this.database.user.findFirst({
+      where: { id },
+
+      select: {
+        name: true,
+        email: true,
+        age: true,
+        role: true,
+      },
+    });
+
+    if (!userAlreadyExists) {
+      return null;
+    }
+
+    return userAlreadyExists;
+  }
+
+  async deleteUserByAdmin(email: string): Promise<void> {
+    await this.database.user.delete({
+      where: { email: email.toLowerCase() },
+    });
   }
 }
