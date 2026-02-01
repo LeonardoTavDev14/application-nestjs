@@ -24,6 +24,9 @@ model User {
   suspendedAccount DateTime?
   blockedAccount   Boolean?
 
+  resetTokenPassword   String?
+  expiredTokenPassword DateTime?
+
   refreshToken RefreshToken[]
 
   created_At DateTime @default(now())
